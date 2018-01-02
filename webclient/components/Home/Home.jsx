@@ -6,6 +6,7 @@ const { hashHistory} = require('react-router');
 import { Grid, Segment, Divider } from 'semantic-ui-react'
 import Chart from '../Chart/chart.js';
 import Line from '../Chart/line.js';
+import './home.css';
 
 const styles = {
 appbar : {
@@ -28,18 +29,15 @@ hashHistory.push('/');
           <Menu.Item name='logout'  onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>
-      <div class="ui segment">
-        <h2 class="ui header" textAlign="center">Weekly report</h2>
-      </div>
+     
       <Grid columns={2} relaxed>
     <Grid.Column>
       <Segment basic>
       <Line/>
       </Segment>
     </Grid.Column>
-    <Divider vertical>Or</Divider>
     <Grid.Column>
-      <Segment basic>
+      <Segment basic className = "chart">
         <Chart/>
       </Segment>
     </Grid.Column>

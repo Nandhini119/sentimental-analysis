@@ -22,6 +22,9 @@ const styles = {
         marginTop: 150,
         textAlign: 'center',
         display: 'inline-block',
+        height : 300
+
+
     },
     button : {
       margin : 10,
@@ -113,14 +116,14 @@ class Login extends React.Component {
                     value={this.state.username}
                     errorText={this.state.usernameError}
                     floatingLabelText={<Accountcircle/>}
-                    onChange={this.onUsernameChange} /><br/>
+                    onChange={this.onUsernameChange} /><br/><br/>
                     <TextField
                        hintText="Password"
                        type="password"
                        value={this.state.password}
                        errorText={this.state.passwordError}
                        floatingLabelText={<Password/>}
-                       onChange={this.onPasswordChange} /><br />
+                       onChange={this.onPasswordChange} /><br /><br/>
 
                        <RaisedButton label="Log In" style = {styles.button} primary={true} onClick = {this.onLogin} />
 

@@ -5,7 +5,7 @@ const options = {
   responsive: true,
   title: {
     display: true,
-    text: 'Chart.js Line Chart'
+    text: 'Trend Graph'
   },
   tooltips: {
     mode: 'label'
@@ -56,7 +56,7 @@ class Trend extends Component {
           ],
           datasets: [
                 {
-                  label: "Happy",
+                  label: "Good",
                   type : "line",
                   data: [100,150,200,75,100,50,200
                   ],
@@ -83,7 +83,7 @@ class Trend extends Component {
                    pointHoverBackgroundColor:  'rgba(54,162,235,0.6)',
                    pointHoverBorderColor:  'rgba(54,162,235,0.6)',
                 }, {
-                  label: "Sad",
+                  label: "Bad",
                   type : "line",
                   data: [250,100,425,100,350,150,350
                   ],

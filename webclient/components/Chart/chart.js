@@ -6,7 +6,7 @@ class Chart extends Component {
     super(props);
     this.state = {
           chartData : {
-              labels : ['positive','neutral','negative'],
+              labels : ['Good','neutral','Bad'],
               datasets : [
                     {
                       label : 'population',
@@ -25,10 +25,8 @@ class Chart extends Component {
 }
   render() {
     return (
-      <div className="Chart">
+      <div className="chart">
         <Pie
-        width = {10}
-        height = {500}
         data = {this.state.chartData}
         options = {{title : {
         	display : this.props.displayTitle,
