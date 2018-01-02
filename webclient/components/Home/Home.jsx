@@ -5,6 +5,7 @@ import { Input, Menu } from 'semantic-ui-react';
 const { hashHistory} = require('react-router');
 import { Grid, Segment, Divider } from 'semantic-ui-react'
 import Chart from '../Chart/chart.js';
+import Line from '../Chart/line.js';
 
 const styles = {
 appbar : {
@@ -27,26 +28,24 @@ hashHistory.push('/');
           <Menu.Item name='logout'  onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>
-      <Grid columns={4} relaxed>
+      <div class="ui segment">
+        <h2 class="ui header" textAlign="center">Weekly report</h2>
+      </div>
+      <Grid columns={2} relaxed>
     <Grid.Column>
       <Segment basic>
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio.
+      <Line/>
       </Segment>
     </Grid.Column>
     <Divider vertical>Or</Divider>
     <Grid.Column>
       <Segment basic>
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio.
+        <Chart/>
       </Segment>
     </Grid.Column>
-    <Divider vertical>And</Divider>
-    <Grid.Column>
-      <Segment basic>
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio.
-      </Segment>
-    </Grid.Column>
+
   </Grid>
-      <Chart/></div>);
+      </div>);
  }
  }
 
