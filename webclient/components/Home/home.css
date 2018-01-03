@@ -1,5 +1,12 @@
+.styles.background{
+  background: white !important;
+}
 .chart {
-height : 80%;
-width : 80%;
+height : 275px;
+width : 97%;
 margin-top: 40px;
  }
+#end {
+  color: white !important;
+
+}

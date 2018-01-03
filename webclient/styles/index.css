@@ -1,4 +1,5 @@
 html, body, #root, #root > [data-reactroot] {
+
   height: 100%;
   margin: 0;
 }

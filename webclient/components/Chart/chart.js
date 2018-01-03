@@ -4,15 +4,21 @@ import {Pie} from 'react-chartjs-2';
 class Chart extends Component {
   constructor(props) {
     super(props);
+    var total=0;
+    for(var i=0;i<3;i++)
+    {
+      total+=this.props.data[i];
+    }
+    var percent=[];
+    this.props.data.map((count)=>{percent.push(Math.round((count/total)*100))});
+    console.log(percent);
     this.state = {
           chartData : {
-              labels : ['Good','neutral','Bad'],
+              labels : ['Good'+'('+percent[0]+'%)','Neutral'+'('+percent[1]+'%)','Bad'+'('+percent[2]+'%)'],
               datasets : [
                     {
                       label : 'population',
-                      data : [
-                        10,3,4,
-                      ],
+                      data : this.props.data,
                       backgroundColor : [
                         'rgba(255,99,132,0.6)',
                         'rgba(54,162,235,0.6)',
@@ -30,8 +36,12 @@ class Chart extends Component {
         data = {this.state.chartData}
         options = {{title : {
         	display : true,
-        	text : 'Sentimental Analysis'
+          tooltips:{
+            display:false
+
+          }
         },
+        responsive: true,
         maintainAspectRatio: false,
         legend : {
         	display : true,

@@ -5,7 +5,7 @@ const options = {
   responsive: true,
   title: {
     display: true,
-    text: 'Trend Graph'
+    
   },
   tooltips: {
     mode: 'label'
