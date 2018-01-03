@@ -16,6 +16,63 @@ import './home.css';
 
 var chart_response={Good:68,Neutral:78,Bad:90};
 var chart_data=[];
+var lineData= [
+      {
+        "Date" : "1.12.17",
+        "Good" : 100,
+        "Normal" : 8,
+        "Bad" : 7,
+
+    },
+
+      {
+        "Date" : "2.12.17",
+        "Good" : 8,
+        "Normal" : 6,
+        "Bad" : 7,
+      },
+
+    {
+
+        "Date" : "3.12.17",
+        "Good" : 6,
+        "Normal" : 8,
+        "Bad" : 5,
+      },
+
+    {
+
+        "Date" : "4.12.17",
+        "Good" : 10,
+        "Normal" : 8,
+        "Bad" : 3,
+      },
+
+    {
+
+        "Date" : "5.12.17",
+        "Good" : 8,
+        "Normal" : 10,
+        "Bad" : 4,
+      },
+
+      {
+        "Date" : "6.12.17",
+        "Good" : 8,
+        "Normal" : 7,
+        "Bad" : 9,
+      },
+
+      {
+        "Date" : "7.12.17",
+        "Good" : 9,
+        "Normal" : 8,
+        "Bad" : 5,
+      }
+
+]
+
+
 for(var mood in chart_response)
 {
   chart_data.push(chart_response[mood]);
@@ -44,6 +101,36 @@ calendar : {
  this.handleEndDate = this.handleEndDate.bind(this);
  this.handleAnalysis = this.handleAnalysis.bind(this);
  }
+ componentWillMount() {
+   let now = new Date().getTime();
+   let sevenDaysBack = now - (1000 * 3600 * 24 * 7);
+   let fromDate = new Date(now);
+   let endDate = new Date(sevenDaysBack);
+   let getDateString = function(date) {
+     let dd = date.getDate() + '';
+     // dd = dd.length === 1 ? '0'+ dd : dd;
+     let MM = (date.getMonth() + 1) + '';
+     MM = MM.length === 1 ? '0'+ MM : MM;
+     let yyyy = date.getFullYear() + '';
+     return dd + '-' + MM + '-' + yyyy;
+   }
+    console.log('fromDate: ', getDateString(fromDate));
+   $.ajax({
+             url: '/feedback',
+             type: 'POST',
+             data: {
+               fromDate: getDateString(fromDate),
+               endDate: getDateString(endDate)
+             },
+             success: function(response) {
+                 console.log(response);
+                             },
+                             error: function(err) {
+                                 alert("error in getting analysis");
+                                 }
+                 });
+ }
+
 handleLogout() {
 hashHistory.push('/');
 
@@ -64,6 +151,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   handleAnalysis()
   {
     let self = this;
+    alert(self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
       alert("äjax");
       $.ajax({
@@ -110,7 +198,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
               </Grid>
               <Segment>
               <Header as='h2' textAlign='center'>Weekly Report</Header>
-              <Line/>
+              <Line  lineData = {lineData}/>
               </Segment>
             </Segment>
         </Grid.Column>
