@@ -13,6 +13,7 @@
     "chart.js": "^2.7.1",
     "express": "^4.15.4",
     "express-session": "^1.15.6",
+    "jquery": "^3.2.1",
     "material-ui": "^0.20.0",
     "mongoose": "^4.11.11",
     "neo4j-driver": "^1.5.0",

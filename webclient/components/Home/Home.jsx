@@ -8,6 +8,10 @@ import Chart from '../Chart/chart.js';
 import Line from '../Chart/line.js';
 import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
+import { Form,Button } from 'semantic-ui-react';
+import $ from 'jquery';
+import './home.css';
+
 import './home.css';
 
 var chart_response={Good:68,Neutral:78,Bad:90};
@@ -31,26 +35,57 @@ calendar : {
  constructor(props) {
  super(props);
  this.state = {
-      startDate: moment(),
-      chart_data:chart_data
+      fromDate : " ",
+      endDate : " ",
+      currentDate : "",
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
  this.handleEndDate = this.handleEndDate.bind(this);
+ this.handleAnalysis = this.handleAnalysis.bind(this);
  }
 handleLogout() {
 hashHistory.push('/');
 
 }
-handleFromDate(e,value) {
-  alert(value);
-    // this.setState({
-    //   startDate: date
-    // });
+handleFromDate(event,date) {
+var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(date).getFullYear();
+    this.setState({
+      fromDate: dmy
+    });
   }
-  handleEndDate(e,value) {
+  handleEndDate(event,date) {
+  var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(date).getFullYear()
+  this.setState({
+    endDate: dmy
+  });
 
+  }
+  handleAnalysis()
+  {
+    let self = this;
+    if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
+      alert("äjax");
+      $.ajax({
+              url: "/feedback",
+              type: 'GET',
+              data: {
+                  fromdate: self.state.fromDate,
+                  enddate: self.state.endDate
+              },
+              success: function(response) {
+                console.log(response);
+
+              },
+              error: function(err) {
+                  alert("error in getting analysis");
+              }
+          })
+    } else {
+      alert("please enter from and end date");
     }
+  }
+
  render() {
  return(<div style = {styles.background}><Menu  inverted style = {styles.appbar}>
         <Menu.Item header>Sentimental Analysis</Menu.Item>
@@ -58,6 +93,7 @@ handleFromDate(e,value) {
           <Menu.Item name='logout'  onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>
+      <Form onSubmit = {this.handleAnalysis}>
       <Grid columns={2} relaxed>
         <Grid.Column>
             <Segment basic>
@@ -68,13 +104,13 @@ handleFromDate(e,value) {
                   </Grid.Column>
                   <Grid.Column>
                       <Segment basic>
-                      <DatePicker style = {styles.calendar} hintText="From date" onChange = {this.handleFromDate} container="inline" />
+                      <DatePicker style = {styles.calendar} hintText="From date"   onChange = {this.handleFromDate}/>
                       </Segment>
                   </Grid.Column>
               </Grid>
               <Segment>
-                <Header as='h2' textAlign='center'>Weekly Report</Header>
-                <Line/>
+              <Header as='h2' textAlign='center'>Weekly Report</Header>
+              <Line/>
               </Segment>
             </Segment>
         </Grid.Column>
@@ -83,22 +119,23 @@ handleFromDate(e,value) {
           <Grid columns={2} relaxed>
             <Grid.Column>
                 <Segment basic>
-                <DatePicker id="end" inputStyle={{color: 'white'}} hintText="End date" onChange = {this.handleEndDate} container="inline" />
+                <DatePicker style = {styles.calendar} hintText="End date"  onChange = {this.handleEndDate} />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
                   <Segment basic>
-
+                        <Button type='submit'>Get Analysis</Button>
                   </Segment>
               </Grid.Column>
           </Grid>
           <Segment>
-            <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
+          <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
             <Chart data={chart_data}/>
           </Segment>
           </Segment>
         </Grid.Column>
   </Grid>
+  </Form>
       </div>);
  }
  }
