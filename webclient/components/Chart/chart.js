@@ -29,7 +29,7 @@ class Chart extends Component {
         <Pie
         data = {this.state.chartData}
         options = {{title : {
-        	display : this.props.displayTitle,
+        	display : true,
         	text : 'Sentimental Analysis'
         },
         maintainAspectRatio: false,
@@ -37,6 +37,7 @@ class Chart extends Component {
         	display : true,
         	position : "right"
         }}}/>
+
 
       </div>
     );
