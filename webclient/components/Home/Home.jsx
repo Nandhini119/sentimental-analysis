@@ -67,8 +67,8 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
       alert("äjax");
       $.ajax({
-              url: "/feedback",
-              type: 'GET',
+              url: "/getFeedback",
+              type: 'POST',
               data: {
                   fromdate: self.state.fromDate,
                   enddate: self.state.endDate
