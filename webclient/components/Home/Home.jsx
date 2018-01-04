@@ -160,7 +160,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
     let self = this;
     console.log('fromDate: ', self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
-      alert("äjax");
+      
       $.ajax({
               url: "/getFeedback",
               type: 'POST',

@@ -28,8 +28,8 @@ module.exports = function(passport) {
     var date1= new Date();
    var date2= new Date(date1);
     var date0=date2.getDate()+'-'+date2.getMonth()+1+'-'+date2.getFullYear();
-    console.log(date0);
-    console.log("array"+obj[1]);
+    //console.log(date0);
+    //console.log("array"+obj[1]);
   var data = {
     feedback : obj[0],
     date: date0,
@@ -42,7 +42,7 @@ module.exports = function(passport) {
           });
           emoticons.find(function(data)
           {
-            console.log(data);
+            //console.log(data);
           });
           // res.status(200);
           res.send("hello")
@@ -65,9 +65,9 @@ module.exports = function(passport) {
             console.log(err);
           }
           else{
-          console.log("-----",data);
+          //console.log("-----",data);
           data.map((data1)=> {
-            console.log("###",data1)
+            //console.log("###",data1)
               if(data1.feedback === "Bad") {
                  badCount += 1;
               }
@@ -102,7 +102,7 @@ module.exports = function(passport) {
 
   router.post('/getFeedback', function(req, res) {
     console.log("inside getfeedback")
-    console.log("request",req.body);
+    //console.log("request",req.body);
 
     //console.log("requestjhg",req);
 
@@ -120,7 +120,7 @@ module.exports = function(passport) {
       if(err) {
         console.log(err)
       }else {
-        console.log("dataaaaaaaaaaaaaaaaaaaaaaaa",data);
+        //console.log("dataaaaaaaaaaaaaaaaaaaaaaaa",data);
         let emotions_object=data;
 
 
