@@ -145,55 +145,61 @@ module.exports = function(passport) {
 
         // console.log(piechart);
 
-var line = [];
-
-        start= new Date("3-01-2018")
-           end=new Date("4-01-2018")
-          while( start<=end ){
-            // console.log("while ")
-             var bad=0, normal=0, good=0;
-
-                for(obj in emotions_object){
-                   console.log("for", emotions_object[obj]);
-                  if(emotions_object[obj].date===start)
-
-                  {
-
-                    if(emotions_object[obj].feedback==="Bad")
-
-                    bad++;
-                    else if(emotions_object[obj].feedback==="Good")
-
-                    good++;
-
-                    else
-
-                    normal++;
-
-                    }
-                }
-                var line_chart={date:start,good:good,normal:normal,bad:bad}
-                  console.log("line_chart count",line_chart)
-                line.push(line_chart)
-                 // var newDate = new Date(start) + 1;
-                var newDate = start.setDate(start.getDate() + 1)
-                  // start = newDate+"";
-                  start = new Date(newDate)
-            }
+        var line = [];
+        var date_arr =[];
+        start= req.body.fromDate;
+           end=req.body.endDate;
+           console.log( "start date :", start);
+           console.log( "end date :",end);
+           // for(obj in emotions_object) {
+           //   if(date_arr.includes(emotions_object[obj].date == false)
+           //   date_arr.push(emotions_object[obj].date);
+           // }
+           // console.log("date array", date_arr);
+           let r = {};
+           emotions_object.map(o => {
+             if(o.date in r) {
+               if(o.feedback === 'Good') {
+                  r[o.date].good += 1;
+               } else if(o.feedback === 'Bad') {
+                  r[o.date].bad += 1;
+               } else if(o.feedback === 'Normal') {
+                  r[o.date].normal += 1;
+               }
+             } else {
+               if(o.feedback === 'Good') {
+                  r[o.date] = {
+                    good: 1,
+                    bad: 0,
+                    normal: 0
+                  };
+               } else if(o.feedback === 'Bad') {
+                  r[o.date] = {
+                    good: 0,
+                    bad: 1,
+                    normal: 0
+                  };
+               } else if(o.feedback === 'Normal') {
+                  r[o.date] = {
+                    good: 0,
+                    bad: 0,
+                    normal: 1
+                  };
+               }
+             }
+           });
+           console.log('r: ', r);
+           let r_arr = [];
+           for(key in r) { r_arr.push({ good: r[key].good,bad : r[key].bad,normal : r[key].normal, date: key}); }
+           console.log('r_arr: ', r_arr);
             var result = {
               piechart:piechart,
-              line_chart:line
+              line_chart:r_arr
             }
             console.log(result);
             res.send(result);
-
       }
     })
-
-
-
-
-
 
 
   });

@@ -109,7 +109,6 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
     let self = this;
     console.log('fromDate: ', self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
-      alert("äjax");
       $.ajax({
               url: "/getFeedback",
               type: 'POST',
@@ -121,13 +120,16 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                 console.log(response.piechart);
                 var chart_response = response.piechart;
                 var chart_data = [];
+                 var line_data = [];
+                
                 console.log("chart_response",chart_response)
                chart_data.push(chart_response.good);
                chart_data.push(chart_response.normal);
                chart_data.push(chart_response.bad);
+               line_data.push(response.line_chart);
                self.setState({chart_data});
-               console.log("chart_data state",chart_data)
-
+               self.setState({line_data})
+               console.log("chart_data state",line_data)
               },
               error: function(err) {
                   alert("error in getting analysis");
@@ -161,7 +163,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                   </Grid.Column>
               </Grid>
               <Segment>
-              <Header as='h2' textAlign='center'>Weekly Report</Header>
+              <Header as='h2' textAlign='center'>Weekly Report </Header>
               <Line  lineData = {this.state.line_data}/>
               </Segment>
             </Segment>
