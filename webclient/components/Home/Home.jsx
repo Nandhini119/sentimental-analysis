@@ -92,6 +92,7 @@ calendar : {
       endDate : " ",
       currentDate : "",
       chart_data : [],
+      line_data : [],
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
@@ -164,8 +165,8 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
               url: "/getFeedback",
               type: 'POST',
               data: {
-                  fromdate: self.state.fromDate,
-                  enddate: self.state.endDate
+                  fromDate: self.state.fromDate,
+                  endDate: self.state.endDate
               },
               success: function(response) {
                 console.log(response.piechart);
@@ -210,14 +211,14 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                       </Segment>
                   </Grid.Column>
               </Grid>
-              <Segment>
+            {/*  <Segment>
               <Header as='h2' textAlign='center'>Weekly Report</Header>
               <Line  lineData = {lineData}/>
-              </Segment>
+              </Segment>*/}
             </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment basic className = "chart">
+          <Segment basic className = "chartPie">
           <Grid columns={2} relaxed>
             <Grid.Column>
                 <Segment basic>
@@ -229,16 +230,19 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                         <Button type='submit'>Get Analysis</Button>
                   </Segment>
               </Grid.Column>
-          </Grid>
-          <Segment>
-          <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
-            <Chart gdata={this.state.chart_data}/>
+              </Grid>
+
 
           </Segment>
-          </Segment>
         </Grid.Column>
-  </Grid>
+        </Grid>
   </Form>
+
+  <Grid columns={1} relaxed className="chart">
+<Header as='h2' align='center'>Consolidated Weekly Report</Header>
+<Chart gdata={this.state.chart_data}/>
+</Grid>
+
       </div>);
  }
  }
