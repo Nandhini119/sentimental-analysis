@@ -16,7 +16,12 @@ class Chart extends Component {
     }
     var percent=[];
 
-    this.props.gdata.map((count)=>{percent.push(Math.round((count/total)*100))});
+    this.props.gdata.map((count)=>{
+      if(count>0)
+      percent.push(Math.round((count/total)*100))
+      else {
+        percent.push(0);
+      }});
 
     let data = {
         labels : ['Good'+'('+percent[0]+'%)','Neutral'+'('+percent[1]+'%)','Bad'+'('+percent[2]+'%)'],

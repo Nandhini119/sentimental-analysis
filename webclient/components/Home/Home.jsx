@@ -32,6 +32,8 @@ calendar : {
       currentDate : "",
       chart_data : [],
       line_data : [],
+      from : " ",
+      end: " ",
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
@@ -52,8 +54,12 @@ calendar : {
      let yyyy = date.getFullYear() + '';
      return dd + '-' + MM + '-' + yyyy;
    }
-    console.log('fromDate: ', getDateString(fromDate));
-    console.log('endDate: ', getDateString(endDate));
+    //console.log('fromDate: ', getDateString(fromDate));
+    //console.log('endDate: ', getDateString(endDate));
+    self.setState({
+      from: getDateString(endDate),
+      end:getDateString(fromDate)
+    })
    $.ajax({
              url: '/getFeedback',
              type: 'POST',
@@ -62,7 +68,7 @@ calendar : {
                endDate: getDateString(fromDate)
              },
              success: function(response) {
-                 console.log(response.line_chart);
+                // console.log(response.line_chart);
                  var chart_response = response.piechart;
                  var chart_data = [];
                  var line_data = [];
@@ -73,7 +79,7 @@ calendar : {
                 line_data.push(response.line_chart);
                 self.setState({chart_data});
                 self.setState({line_data})
-                console.log("line_data state",line_data);
+                //console.log("line_data state",line_data);
                              },
                              error: function(err) {
                                  alert("error in getting analysis");
@@ -101,7 +107,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   handleAnalysis()
   {
     let self = this;
-    console.log('fromDate: ', self.state.fromDate);
+    //console.log('fromDate: ', self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
       $.ajax({
               url: "/getFeedback",
@@ -111,19 +117,22 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                   endDate: self.state.endDate
               },
               success: function(response) {
-                console.log(response.piechart);
+                //console.log(response.piechart);
                 var chart_response = response.piechart;
                 var chart_data = [];
                  var line_data = [];
-
-                console.log("chart_response",chart_response)
+                 self.setState({
+                   from: self.state.fromDate,
+                   end:self.state.endDate
+                 })
+                //console.log("chart_response",chart_response)
                chart_data.push(chart_response.good);
                chart_data.push(chart_response.normal);
                chart_data.push(chart_response.bad);
                line_data.push(response.line_chart);
                self.setState({chart_data});
                self.setState({line_data})
-               console.log("chart_data state",line_data)
+               //console.log("chart_data state",line_data)
               },
               error: function(err) {
                   alert("error in getting analysis");
@@ -152,12 +161,12 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                   </Grid.Column>
                   <Grid.Column>
                       <Segment basic>
-                      <DatePicker style = {styles.calendar} hintText="From date"   onChange = {this.handleFromDate}/>
+                      <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
                       </Segment>
                   </Grid.Column>
               </Grid>
               <Segment>
-              <Header as='h2' textAlign='center'>Weekly Report </Header>
+              <Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
               <Line  lineData = {this.state.line_data}/>
               </Segment>
             </Segment>
@@ -167,7 +176,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
           <Grid columns={2} relaxed>
             <Grid.Column>
                 <Segment basic>
-                <DatePicker style = {styles.calendar} hintText="End date"  onChange = {this.handleEndDate} />
+                <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
                 </Segment>
               </Grid.Column>
               <Grid.Column>
@@ -177,7 +186,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
               </Grid.Column>
           </Grid>
           <Segment>
-          <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
+          <Header as='h2' textAlign='center'>Consolidated Weekly Report from {this.state.from} to {this.state.end}</Header>
             <Chart gdata={this.state.chart_data}/>
 
           </Segment>
