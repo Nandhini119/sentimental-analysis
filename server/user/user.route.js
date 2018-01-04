@@ -137,13 +137,11 @@ module.exports = function(passport) {
         })
 
       var  piechart = {
-
           good:goodCount,
           normal:normalCount,
             bad:badCount,
         }
 
-        // console.log(piechart);
 
         var line = [];
         var date_arr =[];
@@ -151,11 +149,6 @@ module.exports = function(passport) {
            end=req.body.endDate;
            console.log( "start date :", start);
            console.log( "end date :",end);
-           // for(obj in emotions_object) {
-           //   if(date_arr.includes(emotions_object[obj].date == false)
-           //   date_arr.push(emotions_object[obj].date);
-           // }
-           // console.log("date array", date_arr);
            let r = {};
            emotions_object.map(o => {
              if(o.date in r) {
