@@ -12,12 +12,6 @@ import { Form,Button } from 'semantic-ui-react';
 import $ from 'jquery';
 import './home.css';
 
-import './home.css';
-
-
-
-
-
 const styles = {
 appbar : {
 backgroundColor : "",
@@ -121,7 +115,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                 var chart_response = response.piechart;
                 var chart_data = [];
                  var line_data = [];
-                
+
                 console.log("chart_response",chart_response)
                chart_data.push(chart_response.good);
                chart_data.push(chart_response.normal);
