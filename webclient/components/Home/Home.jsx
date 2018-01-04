@@ -4,7 +4,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { Input, Menu } from 'semantic-ui-react';
 const { hashHistory} = require('react-router');
 import { Grid, Segment, Divider, Header } from 'semantic-ui-react'
-import Chart from '../Chart/chart.js';
+import Chart from '../Chart/chart.jsx';
 import Line from '../Chart/line.js';
 import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
@@ -14,8 +14,6 @@ import './home.css';
 
 import './home.css';
 
-var chart_response={Good:68,Neutral:78,Bad:90};
-var chart_data=[];
 var lineData= [
       {
         "Date" : "1.12.17",
@@ -73,10 +71,8 @@ var lineData= [
 ]
 
 
-for(var mood in chart_response)
-{
-  chart_data.push(chart_response[mood]);
-}
+
+
 const styles = {
 appbar : {
 backgroundColor : "",
@@ -95,6 +91,7 @@ calendar : {
       fromDate : " ",
       endDate : " ",
       currentDate : "",
+      chart_data : [],
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
@@ -105,6 +102,7 @@ calendar : {
    let now = new Date().getTime();
    let sevenDaysBack = now - (1000 * 3600 * 24 * 7);
    let fromDate = new Date(now);
+   let self = this;
    let endDate = new Date(sevenDaysBack);
    let getDateString = function(date) {
      let dd = date.getDate() + '';
@@ -116,14 +114,22 @@ calendar : {
    }
     console.log('fromDate: ', getDateString(fromDate));
    $.ajax({
-             url: '/feedback',
+             url: '/getFeedback',
              type: 'POST',
              data: {
-               fromDate: getDateString(fromDate),
-               endDate: getDateString(endDate)
+               fromDate: '2-01-2018',
+               endDate: '3-01-2018'
              },
              success: function(response) {
-                 console.log(response);
+                 console.log(response.piechart);
+                 var chart_response = response.piechart;
+                 var chart_data = [];
+                 console.log("chart_response",chart_response.good)
+                chart_data.push(chart_response.good);
+                chart_data.push(chart_response.normal);
+                chart_data.push(chart_response.bad);
+                self.setState({chart_data});
+                console.log("chart_data state",chart_data)
                              },
                              error: function(err) {
                                  alert("error in getting analysis");
@@ -151,7 +157,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   handleAnalysis()
   {
     let self = this;
-    alert(self.state.fromDate);
+    console.log('fromDate: ', self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
       alert("äjax");
       $.ajax({
@@ -162,7 +168,15 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                   enddate: self.state.endDate
               },
               success: function(response) {
-                console.log(response);
+                console.log(response.piechart);
+                var chart_response = response.piechart;
+                var chart_data = [];
+                console.log("chart_response",chart_response)
+               chart_data.push(chart_response.good);
+               chart_data.push(chart_response.normal);
+               chart_data.push(chart_response.bad);
+               self.setState({chart_data});
+               console.log("chart_data state",chart_data)
 
               },
               error: function(err) {
@@ -218,7 +232,8 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
           </Grid>
           <Segment>
           <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
-            <Chart data={chart_data}/>
+            <Chart gdata={this.state.chart_data}/>
+
           </Segment>
           </Segment>
         </Grid.Column>

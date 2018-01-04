@@ -101,6 +101,10 @@ module.exports = function(passport) {
 
 
   router.post('/getFeedback', function(req, res) {
+    console.log("inside getfeedback")
+    console.log("request",req.body);
+
+    //console.log("requestjhg",req);
 
     let badCount = 0;
     let goodCount = 0;
@@ -110,18 +114,18 @@ module.exports = function(passport) {
     emoticons.find({
 
     //  adid:"NA353557"
-  date: {"$gte": req.body.fromDate, "$lt": req.body.endDate}
+  date: {"$gte": req.body.fromDate, "$lte": req.body.endDate}
 
     },function(err,data) {
       if(err) {
         console.log(err)
       }else {
-        console.log(data);
+        console.log("dataaaaaaaaaaaaaaaaaaaaaaaa",data);
         let emotions_object=data;
 
 
         data.map((data1)=> {
-          console.log("###",data1)
+          // console.log("###",data1)
             if(data1.feedback === "Bad") {
                badCount += 1;
             }
@@ -140,7 +144,7 @@ module.exports = function(passport) {
           normal:normalCount
         }
 
-        console.log(piechart);
+        // console.log(piechart);
 
 var line = [];
 
@@ -169,9 +173,9 @@ var line = [];
 
                     }
                 }
-                console.log(bad)
-                console.log(good)
-                console.log(normal)
+                // console.log(bad)
+                // console.log(good)
+                // console.log(normal)
 
                 var line_chart={date:start,bad:bad,normal:normal,good:good}
 
@@ -185,6 +189,7 @@ var line = [];
               piechart:piechart,
               line_chart:line
             }
+            console.log(result);
             res.send(result);
 
       }
