@@ -28,8 +28,8 @@ module.exports = function(passport) {
     var date1= new Date();
    var date2= new Date(date1);
     var date0=date2.getDate()+'-'+date2.getMonth()+1+'-'+date2.getFullYear();
-    //console.log(date0);
-    //console.log("array"+obj[1]);
+    console.log(date0);
+    console.log("array"+obj[1]);
   var data = {
     feedback : obj[0],
     date: date0,
@@ -42,7 +42,7 @@ module.exports = function(passport) {
           });
           emoticons.find(function(data)
           {
-            //console.log(data);
+            console.log(data);
           });
           // res.status(200);
           res.send("hello")
@@ -51,49 +51,47 @@ module.exports = function(passport) {
 
 
 
-
- router.get('/feedback',function(req,res,next){
-   console.log("********************************************************************");
-   let badCount = 0;
-   let goodCount = 0;
-   let normalCount = 0;
-   // res.send('success');
-   emoticons.find(function(err,data)
-        {
-          if(err)
-          {
-            console.log(err);
-          }
-          else{
-          //console.log("-----",data);
-          data.map((data1)=> {
-            //console.log("###",data1)
-              if(data1.feedback === "Bad") {
-                 badCount += 1;
-              }
-              if(data1.feedback === "Good") {
-                 goodCount += 1;
-              }
-              if(data1.feedback === "Normal") {
-                 normalCount += 1;
-              }
-
-
-
-          })
-
-         }
-           var object={
-             // date:data1.date
-             bad:badCount,
-             good:goodCount,
-             normal:normalCount
-           }
-           console.log("*********************************RESULT********************************",object);
-           res.send(object);
-
-   });
-   });
+ //
+ // router.get('/feedback',function(req,res,next){
+ //   console.log("********************************************************************");
+ //   let badCount = 0;
+ //   let goodCount = 0;
+ //   let normalCount = 0;
+ //   // res.send('success');
+ //   emoticons.find(function(err,data)
+ //        {
+ //          if(err)
+ //          {
+ //            console.log(err);
+ //          }
+ //          else{
+ //          console.log("-----",data);
+ //          data.map((data1)=> {
+ //            console.log("###",data1)
+ //              if(data1.feedback === "Bad") {
+ //                 badCount += 1;
+ //              }
+ //              if(data1.feedback === "Good") {
+ //                 goodCount += 1;
+ //              }
+ //              if(data1.feedback === "Normal") {
+ //                 normalCount += 1;
+ //              }
+ //
+ //          })
+ //
+ //         }
+ //           var object={
+ //             // date:data1.date
+ //             bad:badCount,
+ //             good:goodCount,
+ //             normal:normalCount
+ //           }
+ //           console.log("*********************************RESULT********************************",object);
+ //           res.send(object);
+ //
+ //   });
+ //   });
    var emotions_object;
 
   var object_to_return,obj_to_insert;
@@ -102,7 +100,7 @@ module.exports = function(passport) {
 
   router.post('/getFeedback', function(req, res) {
     console.log("inside getfeedback")
-    //console.log("request",req.body);
+    console.log("request",req.body);
 
     //console.log("requestjhg",req);
 
@@ -120,12 +118,12 @@ module.exports = function(passport) {
       if(err) {
         console.log(err)
       }else {
-        //console.log("dataaaaaaaaaaaaaaaaaaaaaaaa",data);
+        //console.log("dataa",data);
         let emotions_object=data;
 
-
+        //console.log("emoticons_object",data)
         data.map((data1)=> {
-          // console.log("###",data1)
+           console.log("###",data1)
             if(data1.feedback === "Bad") {
                badCount += 1;
             }
@@ -139,9 +137,10 @@ module.exports = function(passport) {
         })
 
       var  piechart = {
-          bad:badCount,
+
           good:goodCount,
-          normal:normalCount
+          normal:normalCount,
+            bad:badCount,
         }
 
         // console.log(piechart);
@@ -155,15 +154,15 @@ var line = [];
              var bad=0, normal=0, good=0;
 
                 for(obj in emotions_object){
-                  // console.log("for")
-                  if(emotions_object[obj].date==start)
+                   console.log("for", emotions_object[obj]);
+                  if(emotions_object[obj].date===start)
 
                   {
 
-                    if(emotions_object[obj].feedback=="Bad")
+                    if(emotions_object[obj].feedback==="Bad")
 
                     bad++;
-                    else if(emotions_object[obj].feedback=="Good")
+                    else if(emotions_object[obj].feedback==="Good")
 
                     good++;
 
@@ -173,12 +172,8 @@ var line = [];
 
                     }
                 }
-                // console.log(bad)
-                // console.log(good)
-                // console.log(normal)
-
-                var line_chart={date:start,bad:bad,normal:normal,good:good}
-
+                var line_chart={date:start,good:good,normal:normal,bad:bad}
+                  console.log("line_chart count",line_chart)
                 line.push(line_chart)
                  // var newDate = new Date(start) + 1;
                 var newDate = start.setDate(start.getDate() + 1)

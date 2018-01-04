@@ -24,11 +24,11 @@ const options = {
           show: true,
           labelString: 'Month'
         },
-        // ticks : {
-        //   callback : function(label) {
-        //     return new Date(label).getDate()+"-"+new Date(label).getMonth();
-        //   }
-        // }
+        ticks : {
+          callback : function(label) {
+            return label.slice(0, 10);
+          }
+        }
       }
     ],
     yAxes: [
@@ -62,34 +62,33 @@ class Trend extends Component {
 
 
 
-  componentWillMount()
-  {
-        var dates = [];
-        var good = [];
-        var bad = [];
-        var normal = [];
-        this.props.lineData.map((datas,index) =>{
-          dates.push(datas.Date);
-          good.push(datas.Good);
-          bad.push(datas.Bad);
-          normal.push(datas.Normal);
-        this.setState({ dates });
-         this.setState({ good });
-         this.setState({ bad });
-          this.setState({ normal });
-        });
-  }
+  render() {
+    console.log("line_chart props",this.props.lineData);
+    var dates = [];
+    var good = [];
+    var bad = [];
+    var normal = [];
+    // console.log('typeof lineData', typeof this.props.lineData);
+    // var data=this.props.lineData[0];
+    // console.log("data",data);
+    // console.log("data length",data.length);
+    if(this.props.lineData.length > 0) {
+      this.props.lineData[0].map((datas,index) =>{
+  // console.log("datas, index", datas,index);
+        dates.push(datas.date);
+        good.push(datas.good);
+        bad.push(datas.bad);
+        normal.push(datas.normal);
+      });
+    }
 
-
-  getData() {
-    return (
-      {
-      labels: this.state.dates,
+    let getData =   {
+      labels: dates,
       datasets: [
            {
              label: "Good",
              type : "line",
-             data: this.state.good,
+             data: good,
              fill: false,
              pointRadius: 0,
             borderColor:   'rgba(255,99,132,0.6)',
@@ -102,7 +101,7 @@ class Trend extends Component {
 
              label: 'Normal',
              type : "line",
-             data: this.state.normal,
+             data: normal,
                fill: false,
                pointRadius: 0,
               borderColor:   'rgba(54,162,235,0.6)',
@@ -114,7 +113,7 @@ class Trend extends Component {
            }, {
              label: "Bad",
              type : "line",
-             data: this.state.bad,
+             data: bad,
                fill: false,
                pointRadius: 0,
               borderColor:   'rgba(255,159,64,0.6)',
@@ -126,13 +125,11 @@ class Trend extends Component {
            }
        ]
       }
-    )
-  }
 
-  render() {
+
     return (
       <div className="trend">
-         <Line data={this.getData()} options = {options}/>
+         <Line data={getData} options = {options}/>
       </div>
     );
   }

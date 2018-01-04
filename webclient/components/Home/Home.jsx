@@ -14,61 +14,6 @@ import './home.css';
 
 import './home.css';
 
-var lineData= [
-      {
-        "Date" : "1.12.17",
-        "Good" : 100,
-        "Normal" : 8,
-        "Bad" : 7,
-
-    },
-
-      {
-        "Date" : "2.12.17",
-        "Good" : 8,
-        "Normal" : 6,
-        "Bad" : 7,
-      },
-
-    {
-
-        "Date" : "3.12.17",
-        "Good" : 6,
-        "Normal" : 8,
-        "Bad" : 5,
-      },
-
-    {
-
-        "Date" : "4.12.17",
-        "Good" : 10,
-        "Normal" : 8,
-        "Bad" : 3,
-      },
-
-    {
-
-        "Date" : "5.12.17",
-        "Good" : 8,
-        "Normal" : 10,
-        "Bad" : 4,
-      },
-
-      {
-        "Date" : "6.12.17",
-        "Good" : 8,
-        "Normal" : 7,
-        "Bad" : 9,
-      },
-
-      {
-        "Date" : "7.12.17",
-        "Good" : 9,
-        "Normal" : 8,
-        "Bad" : 5,
-      }
-
-]
 
 
 
@@ -114,23 +59,27 @@ calendar : {
      return dd + '-' + MM + '-' + yyyy;
    }
     console.log('fromDate: ', getDateString(fromDate));
+    console.log('endDate: ', getDateString(endDate));
    $.ajax({
              url: '/getFeedback',
              type: 'POST',
              data: {
-               fromDate: '2-01-2018',
-               endDate: '3-01-2018'
+               fromDate: getDateString(endDate),
+               endDate: getDateString(fromDate)
              },
              success: function(response) {
-                 console.log(response.piechart);
+                 console.log(response.line_chart);
                  var chart_response = response.piechart;
                  var chart_data = [];
-                 console.log("chart_response",chart_response.good)
+                 var line_data = [];
+                 //console.log("chart_response",chart_response)
                 chart_data.push(chart_response.good);
                 chart_data.push(chart_response.normal);
                 chart_data.push(chart_response.bad);
+                line_data.push(response.line_chart);
                 self.setState({chart_data});
-                console.log("chart_data state",chart_data)
+                self.setState({line_data})
+                console.log("line_data state",line_data);
                              },
                              error: function(err) {
                                  alert("error in getting analysis");
@@ -160,7 +109,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
     let self = this;
     console.log('fromDate: ', self.state.fromDate);
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
-      
+      alert("äjax");
       $.ajax({
               url: "/getFeedback",
               type: 'POST',
@@ -211,14 +160,14 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                       </Segment>
                   </Grid.Column>
               </Grid>
-            {/*  <Segment>
+              <Segment>
               <Header as='h2' textAlign='center'>Weekly Report</Header>
-              <Line  lineData = {lineData}/>
-              </Segment>*/}
+              <Line  lineData = {this.state.line_data}/>
+              </Segment>
             </Segment>
         </Grid.Column>
         <Grid.Column>
-          <Segment basic className = "chartPie">
+          <Segment basic className = "chart">
           <Grid columns={2} relaxed>
             <Grid.Column>
                 <Segment basic>
@@ -230,19 +179,16 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                         <Button type='submit'>Get Analysis</Button>
                   </Segment>
               </Grid.Column>
-              </Grid>
-
+          </Grid>
+          <Segment>
+          <Header as='h2' textAlign='center'>Consolidated Weekly Report</Header>
+            <Chart gdata={this.state.chart_data}/>
 
           </Segment>
+          </Segment>
         </Grid.Column>
-        </Grid>
+  </Grid>
   </Form>
-
-  <Grid columns={1} relaxed className="chart">
-<Header as='h2' align='center'>Consolidated Weekly Report</Header>
-<Chart gdata={this.state.chart_data}/>
-</Grid>
-
       </div>);
  }
  }
