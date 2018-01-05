@@ -68,7 +68,7 @@ calendar : {
                endDate: getDateString(fromDate)
              },
              success: function(response) {
-                // console.log(response.line_chart);
+                console.log(response);
                  var chart_response = response.piechart;
                  var chart_data = [];
                  var line_data = [];

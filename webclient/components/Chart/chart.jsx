@@ -24,15 +24,15 @@ class Chart extends Component {
       }});
 
     let data = {
-        labels : ['Good'+'('+percent[0]+'%)','Neutral'+'('+percent[1]+'%)','Bad'+'('+percent[2]+'%)'],
+        labels : ['Good'+'('+percent[0]+'%)','Normal'+'('+percent[1]+'%)','Bad'+'('+percent[2]+'%)'],
         datasets : [
               {
                 label : 'population',
                 data : this.props.gdata,
                 backgroundColor : [
-                  'rgba(255,99,132,0.6)',
-                  'rgba(54,162,235,0.6)',
-                  'rgba(255,159,64,0.6)',
+                  'green',
+                  'grey',
+                  'red',
                 ]
               }
               ]

@@ -23,8 +23,9 @@ module.exports = function(passport) {
 
 
   router.post('/postfeedback', function(req, res, next) {
-    console.log("inside feedbackroute route");
+    console.log("inside feedbackroute route",req.body);
     var obj = req.body.feedback.split("-");
+    console.log("comments",obj[2])
     var date1= new Date();
    var date2= new Date(date1);
     var date0=date2.getDate()+'-'+date2.getMonth()+1+'-'+date2.getFullYear();
@@ -34,7 +35,7 @@ module.exports = function(passport) {
     feedback : obj[0],
     date: date0,
     adid: obj[1],
-
+    comments : obj[2]
   }
   console.log(data);
    var db=new emoticons(data);
