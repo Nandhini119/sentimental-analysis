@@ -107,7 +107,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div >
+      <div className="login" >
         <Row center='xs'>
           <Paper style={styles.paperstyle} zDepth = {1} >
           <h4 style = {styles.button}>Sentimental Analysis</h4>

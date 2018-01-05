@@ -9,6 +9,7 @@ import Line from '../Chart/line.js';
 import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
 import { Form,Button } from 'semantic-ui-react';
+import TextField from 'material-ui/TextField';
 import $ from 'jquery';
 import './home.css';
 
@@ -21,6 +22,7 @@ calendar : {
   // pointHoverBackgroundColor : "white",
   color: "white !important",
   textColor : "#FFFFFF",
+
 }
 }
  class Home extends React.Component {
@@ -144,17 +146,22 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   }
 
  render() {
- return(<div style = {styles.background}><Menu  inverted style = {styles.appbar}>
+ return(<div  style = {styles.background}><Menu  inverted style = {styles.appbar}>
         <Menu.Item header>Sentimental Analysis</Menu.Item>
         <Menu.Menu position='right'>
           <Menu.Item name='logout'  onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>
-      <Form onSubmit = {this.handleAnalysis}>
+      {/*} <Form onSubmit = {this.handleAnalysis}></Form>*/}
       <Grid columns={2} relaxed>
         <Grid.Column>
             <Segment basic>
-              <Grid columns={2} relaxed>
+            <Form onSubmit = {this.handleAnalysis}>
+            <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
+            <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
+              <Button type='submit'>Get Analysis</Button>
+            </Form>
+              {/*}<Grid columns={2} relaxed>
                 <Grid.Column>
                     <Segment basic>
                     </Segment>
@@ -164,8 +171,8 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                       <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
                       </Segment>
                   </Grid.Column>
-              </Grid>
-              <Segment>
+              </Grid>*/}
+              <Segment id="line_segment">
               <Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
               <Line  lineData = {this.state.line_data}/>
               </Segment>
@@ -173,7 +180,14 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
         </Grid.Column>
         <Grid.Column>
           <Segment basic className = "chart">
-          <Grid columns={2} relaxed>
+          <Form onSubmit = {this.handleAnalysis}>
+          <TextField
+      hintText="AdId"/>
+          <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
+          <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
+            <Button type='submit'>Get Analysis</Button>
+          </Form>
+        {/*}  <Grid columns={2} relaxed>
             <Grid.Column>
                 <Segment basic>
                 <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
@@ -184,16 +198,16 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
                         <Button type='submit'>Get Analysis</Button>
                   </Segment>
               </Grid.Column>
-          </Grid>
-          <Segment>
+          </Grid>*/}
+          <Segment id="line_segment">
           <Header as='h2' textAlign='center'>Consolidated Weekly Report from {this.state.from} to {this.state.end}</Header>
             <Chart gdata={this.state.chart_data}/>
-
           </Segment>
           </Segment>
         </Grid.Column>
   </Grid>
-  </Form>
+
+
       </div>);
  }
  }

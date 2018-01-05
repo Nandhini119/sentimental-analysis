@@ -1,6 +1,6 @@
-.styles.background{
+/* .styles.background{
   background: white !important;
-}
+} */
 .chart {
 height : 275px;
 width : 97%;
@@ -13,4 +13,7 @@ margin-top: 40px;
 
 .chartPie {
   margin-top: -21%;
+}
+#line_segment{
+  height: 400px;
 }
