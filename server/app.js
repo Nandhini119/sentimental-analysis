@@ -6,6 +6,7 @@ function welcome() {
 
 module.exports = function () {
   welcome();
+  let var=10;
   let app = service.createApp();
   app = service.setupWebpack(app);
   app = service.setupStaticRoutes(app);
