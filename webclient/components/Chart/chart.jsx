@@ -12,7 +12,7 @@ class Chart extends Component {
     var total = 0;
     for(var i=0;i<3;i++)
     {
-      total+=this.props.gdata[i];
+    //  total+=this.props.gdata[i];
     }
     var percent=[];
 

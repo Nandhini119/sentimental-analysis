@@ -40,7 +40,7 @@ const options = {
         },
         ticks: {
           suggestedMin: 0,
-          suggestedMax: 50
+          suggestedMax: 15
         }
       }
     ]
@@ -54,9 +54,7 @@ class Trend extends Component {
     super(props);
         this.state = {
            dates:[],
-           good : [],
-           bad : [],
-           normal : [],
+           rating : []
         }
       }
 
@@ -65,20 +63,17 @@ class Trend extends Component {
   render() {
     console.log("line_chart props",this.props.lineData);
     var dates = [];
-    var good = [];
-    var bad = [];
-    var normal = [];
+    var rating = [];
     // console.log('typeof lineData', typeof this.props.lineData);
     // var data=this.props.lineData[0];
     // console.log("data",data);
     // console.log("data length",data.length);
     if(this.props.lineData.length > 0) {
       this.props.lineData[0].map((datas,index) =>{
-  // console.log("datas, index", datas,index);
+        //console.log("datas, index", datas,index);
         dates.push(datas.date);
-        good.push(datas.good);
-        bad.push(datas.bad);
-        normal.push(datas.normal);
+        rating.push(datas.rating/datas.count)
+
       });
     }
 
@@ -86,9 +81,9 @@ class Trend extends Component {
       labels: dates,
       datasets: [
            {
-             label: "Good",
+             //label: "Good",
              type : "line",
-             data: good,
+             data: rating,
              fill: false,
              pointRadius: 0,
             borderColor:   'green',
@@ -97,32 +92,32 @@ class Trend extends Component {
             pointBackgroundColor:  'green',
             pointHoverBackgroundColor:  'green',
             pointHoverBorderColor:  'green',
-           }, {
-
-             label: 'Normal',
-             type : "line",
-             data: normal,
-               fill: false,
-               pointRadius: 0,
-              borderColor:   'grey',
-              backgroundColor:   'grey',
-              pointBorderColor:   'grey',
-              pointBackgroundColor:  'grey',
-              pointHoverBackgroundColor:  'grey',
-              pointHoverBorderColor:  'grey',
-           }, {
-             label: "Bad",
-             type : "line",
-             data: bad,
-               fill: false,
-               pointRadius: 0,
-              borderColor:   'red',
-              backgroundColor:   'red',
-              pointBorderColor:  'red',
-              pointBackgroundColor:  'red',
-              pointHoverBackgroundColor:  'red',
-              pointHoverBorderColor: 'red',
-           }
+          },// {
+           //
+           //   label: 'Normal',
+           //   type : "line",
+           //   data: normal,
+           //     fill: false,
+           //     pointRadius: 0,
+           //    borderColor:   'grey',
+           //    backgroundColor:   'grey',
+           //    pointBorderColor:   'grey',
+           //    pointBackgroundColor:  'grey',
+           //    pointHoverBackgroundColor:  'grey',
+           //    pointHoverBorderColor:  'grey',
+           // }, {
+           //   label: "Bad",
+           //   type : "line",
+           //   data: bad,
+           //     fill: false,
+           //     pointRadius: 0,
+           //    borderColor:   'red',
+           //    backgroundColor:   'red',
+           //    pointBorderColor:  'red',
+           //    pointBackgroundColor:  'red',
+           //    pointHoverBackgroundColor:  'red',
+           //    pointHoverBorderColor: 'red',
+           // }
        ]
       }
 

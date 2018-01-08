@@ -10,6 +10,10 @@ import DatePicker from 'material-ui/DatePicker';
 import moment from 'moment';
 import { Form,Button } from 'semantic-ui-react';
 import TextField from 'material-ui/TextField';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import Slider from 'material-ui/Slider';
 import $ from 'jquery';
 import './home.css';
 
@@ -22,8 +26,13 @@ calendar : {
   // pointHoverBackgroundColor : "white",
   color: "white !important",
   textColor : "#FFFFFF",
-
-}
+},
+headline: {
+   fontSize: 24,
+   paddingTop: 16,
+   marginBottom: 12,
+   fontWeight: 400,
+ },
 }
  class Home extends React.Component {
  constructor(props) {
@@ -32,15 +41,19 @@ calendar : {
       fromDate : " ",
       endDate : " ",
       currentDate : "",
-      chart_data : [],
       line_data : [],
       from : " ",
       end: " ",
+      value : 1,
+      adid : ""
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
  this.handleEndDate = this.handleEndDate.bind(this);
+  this.handleAdId = this.handleAdId.bind(this);
  this.handleAnalysis = this.handleAnalysis.bind(this);
+ this.handleDropDownChange = this.handleDropDownChange.bind(this);
+ this.handleActiveTab = this.handleActiveTab.bind(this);
  }
  componentWillMount() {
    let now = new Date().getTime();
@@ -62,42 +75,51 @@ calendar : {
       from: getDateString(endDate),
       end:getDateString(fromDate)
     })
-   $.ajax({
-             url: '/getFeedback',
-             type: 'POST',
-             data: {
-               fromDate: getDateString(endDate),
-               endDate: getDateString(fromDate)
-             },
-             success: function(response) {
-                console.log(response);
-                 var chart_response = response.piechart;
-                 var chart_data = [];
-                 var line_data = [];
-                 //console.log("chart_response",chart_response)
-                chart_data.push(chart_response.good);
-                chart_data.push(chart_response.normal);
-                chart_data.push(chart_response.bad);
-                line_data.push(response.line_chart);
-                self.setState({chart_data});
-                self.setState({line_data})
-                //console.log("line_data state",line_data);
-                             },
-                             error: function(err) {
-                                 alert("error in getting analysis");
-                                 }
-                 });
+   // $.ajax({
+   //           url: '/getFeedback',
+   //           type: 'POST',
+   //           data: {
+   //             fromDate: getDateString(endDate),
+   //             endDate: getDateString(fromDate)
+   //           },
+   //           success: function(response) {
+   //              console.log(response);
+   //               var chart_response = response.piechart;
+   //               var chart_data = [];
+   //               var line_data = [];
+   //               //console.log("chart_response",chart_response)
+   //              chart_data.push(chart_response.good);
+   //              chart_data.push(chart_response.normal);
+   //              chart_data.push(chart_response.bad);
+   //              line_data.push(response.line_chart);
+   //              self.setState({chart_data});
+   //              self.setState({line_data})
+   //              //console.log("line_data state",line_data);
+   //                           },
+   //                           error: function(err) {
+   //                               alert("error in getting analysis");
+   //                               }
+   //               });
  }
-
+ handleDropDownChange(event, index, value){
+   alert(value);
+   this.setState({value});
+ }
 handleLogout() {
 hashHistory.push('/');
-
+}
+handleActiveTab() {
 }
 handleFromDate(event,date) {
 var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(date).getFullYear();
     this.setState({
       fromDate: dmy
     });
+  }
+  handleAdId(event) {
+    var adid = event.target.value;
+    console.log(adid);
+    this.setState({adid});
   }
   handleEndDate(event,date) {
   var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(date).getFullYear()
@@ -110,29 +132,23 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   {
     let self = this;
     //console.log('fromDate: ', self.state.fromDate);
-    if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 )) {
+    if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 ) ) {
       $.ajax({
               url: "/getFeedback",
               type: 'POST',
               data: {
                   fromDate: self.state.fromDate,
-                  endDate: self.state.endDate
+                  endDate: self.state.endDate,
+                  adid : self.state.adid
               },
               success: function(response) {
-                //console.log(response.piechart);
-                var chart_response = response.piechart;
-                var chart_data = [];
                  var line_data = [];
                  self.setState({
                    from: self.state.fromDate,
                    end:self.state.endDate
                  })
                 //console.log("chart_response",chart_response)
-               chart_data.push(chart_response.good);
-               chart_data.push(chart_response.normal);
-               chart_data.push(chart_response.bad);
                line_data.push(response.line_chart);
-               self.setState({chart_data});
                self.setState({line_data})
                //console.log("chart_data state",line_data)
               },
@@ -152,61 +168,54 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
           <Menu.Item name='logout'  onClick={this.handleLogout} />
         </Menu.Menu>
       </Menu>
-      {/*} <Form onSubmit = {this.handleAnalysis}></Form>*/}
-      <Grid columns={2} relaxed>
+      <Grid columns = {3} relaxed>
         <Grid.Column>
-            <Segment basic>
-            <Form onSubmit = {this.handleAnalysis}>
-            <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
-            <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
-              <Button type='submit'>Get Analysis</Button>
-            </Form>
-              {/*}<Grid columns={2} relaxed>
-                <Grid.Column>
-                    <Segment basic>
-                    </Segment>
-                  </Grid.Column>
-                  <Grid.Column>
-                      <Segment basic>
-                      <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
-                      </Segment>
-                  </Grid.Column>
-              </Grid>*/}
-              <Segment id="line_segment">
-              <Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
-              <Line  lineData = {this.state.line_data}/>
-              </Segment>
-            </Segment>
+        <Grid columns = {2}>
+        <Grid.Column></Grid.Column>
+        <Grid.Column>
+        <DropDownMenu value={this.state.value} onChange={this.handleDropDownChange}>
+          <MenuItem value={1} primaryText="Select group" disabled = {true}/>
+          <MenuItem value={2} primaryText="Every Night" />
+          <MenuItem value={3} primaryText="Weeknights" />
+          <MenuItem value={4} primaryText="Weekends" />
+          <MenuItem value={5} primaryText="Weekly" />
+        </DropDownMenu>
+        </Grid.Column>
+        </Grid>
         </Grid.Column>
         <Grid.Column>
-          <Segment basic className = "chart">
-          <Form onSubmit = {this.handleAnalysis}>
-          <TextField
-      hintText="AdId"/>
-          <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
-          <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
-            <Button type='submit'>Get Analysis</Button>
-          </Form>
-        {/*}  <Grid columns={2} relaxed>
-            <Grid.Column>
-                <Segment basic>
-                <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
-                </Segment>
-              </Grid.Column>
-              <Grid.Column>
-                  <Segment basic>
-                        <Button type='submit'>Get Analysis</Button>
-                  </Segment>
-              </Grid.Column>
-          </Grid>*/}
-          <Segment id="line_segment">
-          <Header as='h2' textAlign='center'>Consolidated Weekly Report from {this.state.from} to {this.state.end}</Header>
-            <Chart gdata={this.state.chart_data}/>
-          </Segment>
-          </Segment>
-        </Grid.Column>
-  </Grid>
+        <Segment basic>
+        <Form onSubmit = {this.handleAnalysis}>
 
+        <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
+        <DatePicker style = {styles.calendar} hintText="End date" maxDate={new Date()} onChange = {this.handleEndDate} />
+          <Button type='submit'>Get Analysis</Button>
+        </Form>
+        </Segment>
+        </Grid.Column>
+        <Grid.Column>
+          <Grid columns = {2}>
+            <Grid.Column> <TextField hintText="AdId" onChange = {this.handleAdId}/>
+            </Grid.Column>
+            <Grid.Column>
+            </Grid.Column>
+          </Grid>
+        </Grid.Column>
+      </Grid>
+      <Tabs>
+    <Tab label="Trend Graph" >
+      <div className = "linechart">
+      <Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
+        <Line  lineData = {this.state.line_data}/>
+      </div>
+    </Tab>
+    <Tab label="Summary" >
+      <div>
+        <Header as='h2' textAlign='center'>Consolidated Weekly Report from {this.state.from} to {this.state.end}</Header>
+      {/*}<Chart gdata={this.state.chart_data}/>*/}
+      </div>
+    </Tab>
+  </Tabs>
 
       </div>);
  }
