@@ -274,29 +274,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
           //for particular employee in a group
         }
       }
-      // $.ajax({
-      //         url: "/getFeedback",
-      //         type: 'POST',
-      //         data: {
-      //             fromDate: self.state.fromDate,
-      //             endDate: self.state.endDate,
-      //             adid : self.state.adid
-      //         },
-      //         success: function(response) {
-      //            var line_data = [];
-      //            self.setState({
-      //              from: self.state.fromDate,
-      //              end:self.state.endDate
-      //            })
-      //           //console.log("chart_response",chart_response)
-      //          line_data.push(response.line_chart);
-      //          self.setState({line_data})
-      //          //console.log("chart_data state",line_data)
-      //         },
-      //         error: function(err) {
-      //             alert("error in getting analysis");
-      //         }
-      //     })
+
     } else {
       alert("please enter from and end date");
     }
@@ -304,10 +282,57 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
 
  render() {
    let self = this;
- return(<div>
-   {
-     self.state.adid_arr.length > 0 ?
-   <div  style = {styles.background}><Menu  inverted style = {styles.appbar}>
+   let a  = " ";
+   let  b = " ";
+   if(self.state.line_data.length >0 ) {
+   a =  (<div><Header as='h2' textAlign='center'>Weekly Report from {self.state.from} to {self.state.end}</Header>
+    <Line  lineData = {self.state.line_data}/></div>)
+ }
+ if(self.state.table_arr.length > 0 ) {
+   b= (<div> <Header as='h2' textAlign='center'>Report on {self.state.fromDate} </Header><Table celled padded>
+   <Table.Header>
+     <Table.Row>
+       <Table.HeaderCell singleLine>Intensity of Feelings</Table.HeaderCell>
+       <Table.HeaderCell>Happy</Table.HeaderCell>
+       <Table.HeaderCell>Sad</Table.HeaderCell>
+       <Table.HeaderCell>Angry</Table.HeaderCell>
+       <Table.HeaderCell>Afraid</Table.HeaderCell>
+       <Table.HeaderCell>Ashamed</Table.HeaderCell>
+     </Table.Row>
+     </Table.Header>
+     <Table.Body>
+      <Table.Row>
+
+        <Table.Cell>High</Table.Cell>
+        <Table.Cell>{self.state.H_H}</Table.Cell>
+        <Table.Cell>{self.state.H_S}</Table.Cell>
+        <Table.Cell>{self.state.H_AN}</Table.Cell>
+        <Table.Cell>{self.state.H_AF}</Table.Cell>
+        <Table.Cell>{self.state.H_AS}</Table.Cell>
+     </Table.Row>
+     <Table.Row>
+       <Table.Cell>Medium</Table.Cell>
+       <Table.Cell>{self.state.M_H}</Table.Cell>
+       <Table.Cell>{self.state.M_S}</Table.Cell>
+       <Table.Cell>{self.state.M_AN}</Table.Cell>
+       <Table.Cell>{self.state.M_AF}</Table.Cell>
+       <Table.Cell>{self.state.M_AS}</Table.Cell>
+    </Table.Row>
+    <Table.Row>
+      <Table.Cell>Low</Table.Cell>
+      <Table.Cell>{self.state.L_H}</Table.Cell>
+      <Table.Cell>{self.state.L_S}</Table.Cell>
+      <Table.Cell>{self.state.L_AN}</Table.Cell>
+      <Table.Cell>{self.state.L_AF}</Table.Cell>
+      <Table.Cell>{self.state.L_AS}</Table.Cell>
+   </Table.Row>
+ </Table.Body>
+ </Table>
+ </div>);
+ }
+ let content = '';
+ if(self.state.adid_arr.length > 0) {
+   content = (<div  style = {styles.background}><Menu  inverted style = {styles.appbar}>
           <Menu.Item header>Sentimental Analysis</Menu.Item>
           <Menu.Menu position='right'>
             <Menu.Item name='logout'  onClick={this.handleLogout} />
@@ -333,100 +358,17 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
         </Row>
         </Row>
         </Form>
+        </div>
         <Row center = "xs">
-
-          {self.state.line_data.length >0 ?<div><Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
-           <Line  lineData = {self.state.line_data}/></div> :<div> <Header as='h2' textAlign='center'>Report on {this.state.fromDate} </Header><Table celled padded>
-           <Table.Header>
-             <Table.Row>
-               <Table.HeaderCell singleLine>Intensity of Feelings</Table.HeaderCell>
-               <Table.HeaderCell>Happy</Table.HeaderCell>
-               <Table.HeaderCell>Sad</Table.HeaderCell>
-               <Table.HeaderCell>Angry</Table.HeaderCell>
-               <Table.HeaderCell>Afraid</Table.HeaderCell>
-               <Table.HeaderCell>Ashamed</Table.HeaderCell>
-             </Table.Row>
-             </Table.Header>
-             <Table.Body>
-              <Table.Row>
-
-                <Table.Cell>High</Table.Cell>
-                <Table.Cell>{self.state.H_H}</Table.Cell>
-                <Table.Cell>{self.state.H_S}</Table.Cell>
-                <Table.Cell>{self.state.H_AN}</Table.Cell>
-                <Table.Cell>{self.state.H_AF}</Table.Cell>
-                <Table.Cell>{self.state.H_AS}</Table.Cell>
-             </Table.Row>
-             <Table.Row>
-               <Table.Cell>Medium</Table.Cell>
-               <Table.Cell>{self.state.M_H}</Table.Cell>
-               <Table.Cell>{self.state.M_S}</Table.Cell>
-               <Table.Cell>{self.state.M_AN}</Table.Cell>
-               <Table.Cell>{self.state.M_AF}</Table.Cell>
-               <Table.Cell>{self.state.M_AS}</Table.Cell>
-            </Table.Row>
-            <Table.Row>
-              <Table.Cell>Low</Table.Cell>
-              <Table.Cell>{self.state.L_H}</Table.Cell>
-              <Table.Cell>{self.state.L_S}</Table.Cell>
-              <Table.Cell>{self.state.L_AN}</Table.Cell>
-              <Table.Cell>{self.state.L_AF}</Table.Cell>
-              <Table.Cell>{self.state.L_AS}</Table.Cell>
-           </Table.Row>
-         </Table.Body>
-         </Table>
-         </div>
-}
-
-
-        </Row>
-</div>
-        {/*}<Tabs >
-      <Tab label="For a Group" style = {styles.tabs}>
-        <div className = "linechart">
-
-        <Form onSubmit = {this.handleAnalysis}>
-        <DatePicker style = {styles.calendar} hintText="From date" maxDate={new Date()}  onChange = {this.handleFromDate}/>
-        <DatePicker style = {styles.calendar} hintText="End da te" maxDate={new Date()} onChange = {this.handleEndDate} />
-          <Button type='submit'>Get Analysis</Button>
-        </Form>
-        <Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
-          <Line  lineData = {this.state.line_data}/>
-        </div>
-      </Tab>
-      <Tab label="For an Employee" >
         <div>
-          <Header as='h2' textAlign='center'>Consolidated Weekly Report from {this.state.from} to {this.state.end}</Header>
-        {/*}<Chart gdata={this.state.chart_data}/>
         </div>
-      </Tab>
-    </Tabs>*/}
-
-        {/*}<Grid columns = {3} relaxed>
-          <Grid.Column>
-          <Grid columns = {2}>
-          <Grid.Column></Grid.Column>
-          <Grid.Column>
-
-          </Grid.Column>
-          </Grid>
-          </Grid.Column>
-          <Grid.Column>
-          <Segment basic>
-
-          </Segment>
-          </Grid.Column>
-          <Grid.Column>
-            <Grid columns = {2}>
-              <Grid.Column>
-              </Grid.Column>
-              <Grid.Column>
-              </Grid.Column>
-            </Grid>
-          </Grid.Column>
-        </Grid>*/}
-
-        </div>: " "}</div>);
+        </Row></div>)
+ }
+ return(<div>
+      {content}
+      {a}
+      {b}
+   </div>)
  }
  }
 
