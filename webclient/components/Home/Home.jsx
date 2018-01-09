@@ -110,7 +110,7 @@ headline: {
         var array =[];
         console.log("response",response.adid);
         response.adid.map((adid,index) => {
-          array.push({key: index, value: adid.adid, text: adid.adid})
+          array.push({key: index, value: adid, text: adid})
         })
         self.setState({adid_arr : array});
 
@@ -252,7 +252,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
         //graph data
         console.log("adid",this.state.adid_value.length);
         if(this.state.adid_value.length >=1 ) {
-
+          console.log("dsfdGF")
           //for all employee in a group
           $.ajax({
             url : '/group_analysis',
@@ -272,7 +272,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
           })
 
         } else {
-            console.log("adid",this.state.adid_value);
+            console.log("adidfghf",this.state.adid_value);
             $.ajax({
               url : '/group_analysis',
               type : 'GET',

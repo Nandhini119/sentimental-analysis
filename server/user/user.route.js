@@ -24,31 +24,55 @@ module.exports = function(passport) {
 
 router.get('/adid',function(req,res,next) {
   console.log("get adid");
-  emoticons.find(function(err,data)
-  {
-    if(err) {
-      throw err;
+  let r = ["All"];
+  emoticons.find({}, 'adid', function (err, docs) {
+if(err)
+console.log(err);
+else {
+  console.log("response data",docs)
+  docs.map((data,index)=> {
+    //console.log(data.adid);
+    if( r.includes(data.adid)){
+      console.log("exists");
     } else {
-    //console.log(data);
-    var adid = [{adid : "All"}];
-    let r = {};
-    data.map(o => {
-      if(o.adid in r) {
-        //console.log("r...",o.date);
-      } else {
-        //console.log("else...",o.date);
-        r[o.date] = {
-          adid : o.adid
-        }
-      }
-    });
-    for(key in r) { adid.push({ adid: r[key].adid}); }
-    var result = {
-      adid : adid
+      console.log("new");
+      r.push(data.adid);
+    }
+  })
+  console.log("r",r)
+  var result = {
+      adid : r
     }
     res.send(result);
-  }
-  });
+}
+});
+
+  // emoticons.find({adid : 1},function(err,data)
+  // {
+  //   if(err) {
+  //     throw err;
+  //   } else {
+  //   console.log(data,"dfhgf");
+  //   var adid = [{adid : "All"}];
+  //   let r = {};
+  //   data.map(o => {
+  //     if(o.adid in r) {
+  //       //console.log("r...",o.date);
+  //     } else {
+  //       //console.log("else...",o.date);
+  //       r[o.date] = {
+  //         adid : o.adid
+  //       }
+  //     }
+  //   });
+  //   console.log("r",r)
+  //   for(key in r) { adid.push({ adid: r[key].adid}); }
+  //   var result = {
+  //     adid : adid
+  //   }
+  //   res.send(result);
+  // }
+  // });
 
 })
 
