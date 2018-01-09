@@ -114,31 +114,6 @@ headline: {
         console.log("error",err);
       }
     })
-   // $.ajax({
-   //           url: '/getFeedback',
-   //           type: 'POST',
-   //           data: {
-   //             fromDate: getDateString(endDate),
-   //             endDate: getDateString(fromDate)
-   //           },
-   //           success: function(response) {
-   //              console.log(response);
-   //               var chart_response = response.piechart;
-   //               var chart_data = [];
-   //               var line_data = [];
-   //               //console.log("chart_response",chart_response)
-   //              chart_data.push(chart_response.good);
-   //              chart_data.push(chart_response.normal);
-   //              chart_data.push(chart_response.bad);
-   //              line_data.push(response.line_chart);
-   //              self.setState({chart_data});
-   //              self.setState({line_data})
-   //              //console.log("line_data state",line_data);
-   //                           },
-   //                           error: function(err) {
-   //                               alert("error in getting analysis");
-   //                               }
-   //               });
  }
  handleDropDownGroup(event, a){
    this.setState({group_value:value});
@@ -237,7 +212,6 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
               }
             })
           //for particular employee in a group
-
         }
       }
       // $.ajax({

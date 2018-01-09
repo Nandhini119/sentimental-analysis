@@ -19,7 +19,7 @@ const options = {
         display: true,
         scaleLabel: {
           display: true,
-          labelString: 'Month'
+          labelString: 'Days'
         },
         ticks : {
           callback : function(label) {
@@ -90,32 +90,7 @@ class Trend extends Component {
             pointBackgroundColor:  'green',
             pointHoverBackgroundColor:  'green',
             pointHoverBorderColor:  'green',
-          },// {
-           //
-           //   label: 'Normal',
-           //   type : "line",
-           //   data: normal,
-           //     fill: false,
-           //     pointRadius: 0,
-           //    borderColor:   'grey',
-           //    backgroundColor:   'grey',
-           //    pointBorderColor:   'grey',
-           //    pointBackgroundColor:  'grey',
-           //    pointHoverBackgroundColor:  'grey',
-           //    pointHoverBorderColor:  'grey',
-           // }, {
-           //   label: "Bad",
-           //   type : "line",
-           //   data: bad,
-           //     fill: false,
-           //     pointRadius: 0,
-           //    borderColor:   'red',
-           //    backgroundColor:   'red',
-           //    pointBorderColor:  'red',
-           //    pointBackgroundColor:  'red',
-           //    pointHoverBackgroundColor:  'red',
-           //    pointHoverBorderColor: 'red',
-           // }
+          },
        ]
       }
 

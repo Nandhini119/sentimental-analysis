@@ -47,39 +47,12 @@ else {
 }
 });
 
-  // emoticons.find({adid : 1},function(err,data)
-  // {
-  //   if(err) {
-  //     throw err;
-  //   } else {
-  //   console.log(data,"dfhgf");
-  //   var adid = [{adid : "All"}];
-  //   let r = {};
-  //   data.map(o => {
-  //     if(o.adid in r) {
-  //       //console.log("r...",o.date);
-  //     } else {
-  //       //console.log("else...",o.date);
-  //       r[o.date] = {
-  //         adid : o.adid
-  //       }
-  //     }
-  //   });
-  //   console.log("r",r)
-  //   for(key in r) { adid.push({ adid: r[key].adid}); }
-  //   var result = {
-  //     adid : adid
-  //   }
-  //   res.send(result);
-  // }
-  // });
-
 })
 router.get('/group_analysis',function(req,res,next) {
   console.log("in grup analysis", req.query.adid);
   if(req.query.adid == "All" || req.query.adid == 1) {
     console.log("if")
-    emoticons.find(function(err,data)
+    emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}},function(err,data)
     { if(err)
       throw err;
     else {
@@ -287,10 +260,7 @@ router.get('/group_analysis',function(req,res,next) {
         }
   console.log( data);
    var db=new emoticons(data);
-  //  emoticons.find({date : data.date , adid : data.adid},function(err,res) {
-      //console.log("response",res[0].adid,res[0].date);
 
-      //if(res.length > 0){
         console.log("data rating, type",data.adid, typeof data.rating);
           emoticons.update({ adid: data.adid, date: data.date },
            {'$set': {feedback: data.feedback, rating: data.rating, comments: data.comments}},
@@ -300,61 +270,10 @@ router.get('/group_analysis',function(req,res,next) {
              console.log('res: ', res);
            }
          )
-        // emoticons.update({ adid: "NA353557",date : "9-01-2018" },
-        //   {'$set':{feedback : "Low_A",date : data.date,adid: data.adid,rating : data.rating,comments : data.comments}},
-        //   { upsert: true })
-      //} else {
-       // db.save().then((doc)=>{console.console.log("successfully inserted");
-       //  });
-      //}
-    //})
+
           res.status(200);
           res.send("hello")
-
   });
-
- //
- // router.get('/feedback',function(req,res,next){
- //   console.log("********************************************************************");
- //   let badCount = 0;
- //   let goodCount = 0;
- //   let normalCount = 0;
- //   // res.send('success');
- //   emoticons.find(function(err,data)
- //        {
- //          if(err)
- //          {
- //            console.log(err);
- //          }
- //          else{
- //          console.log("-----",data);
- //          data.map((data1)=> {
- //            console.log("###",data1)
- //              if(data1.feedback === "Bad") {
- //                 badCount += 1;
- //              }
- //              if(data1.feedback === "Good") {
- //                 goodCount += 1;
- //              }
- //              if(data1.feedback === "Normal") {
- //                 normalCount += 1;
- //              }
- //
- //          })
- //
- //         }
- //           var object={
- //             // date:data1.date
- //             bad:badCount,
- //             good:goodCount,
- //             normal:normalCount
- //           }
- //           console.log("*********************************RESULT********************************",object);
- //           res.send(object);
- //
- //   });
- //   });
-
 
 
   router.post('/getFeedback', function(req, res) {
