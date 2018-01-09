@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar';
 import FlatButton from 'material-ui/FlatButton';
-import { Input, Menu,Dropdown } from 'semantic-ui-react';
+import { Input, Menu,Dropdown, Table } from 'semantic-ui-react';
 const { hashHistory} = require('react-router');
 import { Grid, Segment, Divider, Header } from 'semantic-ui-react'
 import Chart from '../Chart/chart.jsx';
@@ -66,6 +66,12 @@ headline: {
       group : "",
       adid : "",
       adid_arr : [],
+      table_arr :"",
+      H_H : 0,M_H:0,L_H:0,
+      H_S :0,M_S :0,L_S:0,
+      H_AN : 0,M_AN :0,L_AN :0,
+      H_AF : 0,M_AF : 0,L_AF : 0,
+      H_AS : 0,M_AS :0,L_AS : 0,
     };
  this.handleLogout = this.handleLogout.bind(this);
  this.handleFromDate = this.handleFromDate.bind(this);
@@ -145,6 +151,11 @@ headline: {
  }
  handleDropDownAdId(event,a){
    this.setState({adid_value : a.value});
+   this.setState({H_H : 0,M_H:0,L_H:0,
+   H_S :0,M_S :0,L_S:0,
+   H_AN : 0,M_AN :0,L_AN :0,
+   H_AF : 0,M_AF : 0,L_AF : 0,
+   H_AS : 0,M_AS :0,L_AS : 0})
  }
 handleLogout() {
 hashHistory.push('/');
@@ -178,6 +189,64 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
     if(!(this.state.fromDate.length <= 1 || this.state.endDate.length <=1 ) ) {
       if(this.state.fromDate == this.state.endDate) {
         //table data
+          var table_array = [];
+
+            $.ajax({
+              url : '/table_analysis',
+              type : 'GET',
+              data : {
+                fromDate: self.state.fromDate,
+                endDate: self.state.endDate,
+                adid : this.state.adid_value
+              },
+              success : function(response) {
+                console.log("table response",response.table);
+                  table_array.push(response.table);
+                  self.setState({table_arr : table_array});
+                  console.log("table",self.state.table_arr);
+                  response.table.map((data,index) => {
+                    console.log("data",data)
+                    if(data.emotion == "High_Happy") {
+                      console.log("dfg")
+                      self.setState({H_H : data.count})
+                    } else if(data.emotion == "Medium_Happy") {
+                       self.setState({M_H : data.count});
+                    } else if(data.emotion == "Low_Happy") {
+                       self.setState({L_H : data.count});
+                    } else if(data.emotion == "High_Sad") {
+                       self.setState({H_S : data.count});
+                    } else if(data.emotion == "Medium_Sad") {
+                       self.setState({M_S : data.count});
+                    } else if(data.emotion == "Low_Sad") {
+                       self.setState({L_S : data.count});
+                    } else if(data.emotion == "High_Angry") {
+                       self.setState({H_AN : data.count});
+                    } else if(data.emotion == "Medium_Angry") {
+                       self.setState({M_AN : data.count});
+                    } else if(data.emotion == "Low_Angry") {
+                       self.setState({L_AN : data.count});
+                    } else if(data.emotion == "High_Afraid") {
+                       self.setState({H_AF : data.count});
+                    } else if(data.emotion == "Medium_Afraid") {
+                       self.setState({M_AF : data.count});
+                    } else if(data.emotion == "Low_Afraid") {
+                       self.setState({L_AF : data.count});
+                    } else if(data.emotion == "High_Ashamed") {
+                       self.setState({H_AS : data.count});
+                    } else if(data.emotion == "Medium_Ashamed") {
+                       self.setState({M_AS : data.count});
+                    } else if(data.emotion == "Low_Ashamed") {
+                       self.setState({L_AS : data.count});
+                    } else {
+
+                    }
+                  })
+
+              },
+              error : function(err) {
+                console.log("error",err);
+              }
+            })
 
       } else {
         //graph data
@@ -195,15 +264,7 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
             },
             success : function(response) {
               console.log("response",response);
-              var line_data = [];
-                        self.setState({
-                          from: self.state.fromDate,
-                          end:self.state.endDate
-                        })
-                       //console.log("chart_response",chart_response)
-                      line_data.push(response.line_chart);
-                      self.setState({line_data})
-                      console.log("line graph data",self.state.line_data);
+
             },
             error : function(err) {
               console.log("error",err);
@@ -300,10 +361,53 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
         </Row>
         </Form>
         <Row center = "xs">
-         {self.state.line_data.length >0 ? <div><Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
-          <Line  lineData = {self.state.line_data}/></div> : ""}
+
+          {self.state.line_data.length >0 ?<div><Header as='h2' textAlign='center'>Weekly Report from {this.state.from} to {this.state.end}</Header>
+           <Line  lineData = {self.state.line_data}/></div> :<div> <Header as='h2' textAlign='center'>Report on {this.state.fromDate} </Header><Table celled padded>
+           <Table.Header>
+             <Table.Row>
+               <Table.HeaderCell singleLine>Intensity of Feelings</Table.HeaderCell>
+               <Table.HeaderCell>Happy</Table.HeaderCell>
+               <Table.HeaderCell>Sad</Table.HeaderCell>
+               <Table.HeaderCell>Angry</Table.HeaderCell>
+               <Table.HeaderCell>Afraid</Table.HeaderCell>
+               <Table.HeaderCell>Ashamed</Table.HeaderCell>
+             </Table.Row>
+             </Table.Header>
+             <Table.Body>
+              <Table.Row>
+
+                <Table.Cell>High</Table.Cell>
+                <Table.Cell>{self.state.H_H}</Table.Cell>
+                <Table.Cell>{self.state.H_S}</Table.Cell>
+                <Table.Cell>{self.state.H_AN}</Table.Cell>
+                <Table.Cell>{self.state.H_AF}</Table.Cell>
+                <Table.Cell>{self.state.H_AS}</Table.Cell>
+             </Table.Row>
+             <Table.Row>
+               <Table.Cell>Medium</Table.Cell>
+               <Table.Cell>{self.state.M_H}</Table.Cell>
+               <Table.Cell>{self.state.M_S}</Table.Cell>
+               <Table.Cell>{self.state.M_AN}</Table.Cell>
+               <Table.Cell>{self.state.M_AF}</Table.Cell>
+               <Table.Cell>{self.state.M_AS}</Table.Cell>
+            </Table.Row>
+            <Table.Row>
+              <Table.Cell>Low</Table.Cell>
+              <Table.Cell>{self.state.L_H}</Table.Cell>
+              <Table.Cell>{self.state.L_S}</Table.Cell>
+              <Table.Cell>{self.state.L_AN}</Table.Cell>
+              <Table.Cell>{self.state.L_AF}</Table.Cell>
+              <Table.Cell>{self.state.L_AS}</Table.Cell>
+           </Table.Row>
+         </Table.Body>
+         </Table>
+         </div>
+}
+
+
         </Row>
-        </div>
+</div>
         {/*}<Tabs >
       <Tab label="For a Group" style = {styles.tabs}>
         <div className = "linechart">

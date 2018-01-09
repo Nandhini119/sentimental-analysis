@@ -51,15 +51,85 @@ router.get('/adid',function(req,res,next) {
   });
 
 })
-router.get('/group_analysis',function(req,res,next) {
-  console.log("in grup analysis", req.query.adid);
+
+router.get('/table_analysis',function(req,res,next) {
+  console.log("In Table analysis",req.query.adid);
   if(req.query.adid == "All" || req.query.adid == 1) {
-    console.log("if")
-    emoticons.find(function(err,data)
+    emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}},function(err,data)
+    { if(err)
+      throw err;
+    else {
+      console.log("equal dates data",data);
+      let r = {};
+      data.map(o => {
+        if(o.feedback in r) {
+          //console.log("r...",o.date);
+          r[o.feedback].count +=1;
+
+        } else {
+          //console.log("else...",o.date);
+          r[o.feedback] = {
+            count : 1,
+          }
+        }
+      });
+      console.log('r: ', r);
+      let r_arr = [];
+      for(key in r) { r_arr.push({count : r[key].count, emotion: key}); }
+      console.log('r_arr: ', r_arr);
+       var result = {
+         table :r_arr
+       }
+       //console.log(result);
+
+       res.send(result);
+    }
+    });
+  } else {
+    console.log("else")
+    emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}, adid : req.query.adid},function(err,data)
     { if(err)
       throw err;
     else {
       console.log(data);
+      let r = {};
+      data.map(o => {
+        if(o.feedback in r) {
+          //console.log("r...",o.date);
+          r[o.feedback].count +=1;
+
+        } else {
+          //console.log("else...",o.date);
+          r[o.feedback] = {
+            count : 1,
+          }
+        }
+      });
+      console.log('r: ', r);
+      let r_arr = [];
+      for(key in r) { r_arr.push({ count : r[key].count, emotion: key}); }
+      console.log('r_arr: ', r_arr);
+       var result = {
+         table:r_arr
+       }
+       //console.log(result);
+       res.send(result);
+    }
+    });
+
+
+  }
+})
+
+router.get('/group_analysis',function(req,res,next) {
+  console.log("in grup analysis", req.query.adid);
+  if(req.query.adid == "All" || req.query.adid == 1) {
+    console.log("if")
+    emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}},function(err,data)
+    { if(err)
+      throw err;
+    else {
+      console.log("equal dates data",data);
       let r = {};
       data.map(o => {
         if(o.date in r) {
@@ -82,6 +152,7 @@ router.get('/group_analysis',function(req,res,next) {
          line_chart:r_arr
        }
        //console.log(result);
+
        res.send(result);
     }
     });
