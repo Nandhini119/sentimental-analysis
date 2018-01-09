@@ -157,7 +157,6 @@ var dmy = new Date(date).getDate()+"-"+new Date(date).getMonth()+1+"-"+new Date(
   }
   handleAnalysis()
   {
-
     console.log(this.state.fromDate,this.state.endDate,this.state.adid_value);
     let self = this;
     //console.log('fromDate: ', self.state.fromDate);
