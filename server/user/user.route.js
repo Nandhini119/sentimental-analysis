@@ -22,18 +22,117 @@ module.exports = function(passport) {
       })(req, res, next);
   });
 
+router.get('/adid',function(req,res,next) {
+  console.log("get adid");
+  emoticons.find(function(err,data)
+  {
+    if(err) {
+      throw err;
+    } else {
+    //console.log(data);
+    var adid = [{adid : "All"}];
+    let r = {};
+    data.map(o => {
+      if(o.adid in r) {
+        //console.log("r...",o.date);
+      } else {
+        //console.log("else...",o.date);
+        r[o.date] = {
+          adid : o.adid
+        }
+      }
+    });
+    for(key in r) { adid.push({ adid: r[key].adid}); }
+    var result = {
+      adid : adid
+    }
+    res.send(result);
+  }
+  });
 
+})
+router.get('/group_analysis',function(req,res,next) {
+  console.log("in grup analysis", req.query.adid);
+  if(req.query.adid == "All" || req.query.adid == 1) {
+    console.log("if")
+    emoticons.find(function(err,data)
+    { if(err)
+      throw err;
+    else {
+      console.log(data);
+      let r = {};
+      data.map(o => {
+        if(o.date in r) {
+          //console.log("r...",o.date);
+          r[o.date].count +=1;
+          r[o.date].rating += o.rating;
+        } else {
+          //console.log("else...",o.date);
+          r[o.date] = {
+            count : 1,
+            rating : o.rating
+          }
+        }
+      });
+      console.log('r: ', r);
+      let r_arr = [];
+      for(key in r) { r_arr.push({ rating: r[key].rating,count : r[key].count, date: key}); }
+      console.log('r_arr: ', r_arr);
+       var result = {
+         line_chart:r_arr
+       }
+       //console.log(result);
+       res.send(result);
+    }
+    });
+  } else {
+    console.log("else")
+    emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}, adid : req.query.adid},function(err,data)
+    { if(err)
+      throw err;
+    else {
+      console.log(data);
+      let r = {};
+      data.map(o => {
+        if(o.date in r) {
+          //console.log("r...",o.date);
+          r[o.date].count +=1;
+          r[o.date].rating += o.rating;
+        } else {
+          //console.log("else...",o.date);
+          r[o.date] = {
+            count : 1,
+            rating : o.rating
+          }
+        }
+      });
+      console.log('r: ', r);
+      let r_arr = [];
+      for(key in r) { r_arr.push({ rating: r[key].rating,count : r[key].count, date: key}); }
+      console.log('r_arr: ', r_arr);
+       var result = {
+         line_chart:r_arr
+       }
+       //console.log(result);
+       res.send(result);
+    }
+    });
+
+  }
+})
   router.post('/postfeedback', function(req, res, next) {
     console.log("inside feedbackroute route",req.body);
     var obj = req.body.feedback.split("-");
     console.log("comments",obj[2])
     var date1= new Date();
+    var data = {};
+    var adid;
    var date2= new Date(date1);
     var date0=date2.getDate()+'-'+date2.getMonth()+1+'-'+date2.getFullYear();
     console.log(date0);
     console.log("array"+obj[1]);
       if(obj[0] == "High_Happy") {
-        var data = {
+         data = {
           feedback : obj[0],
           date: date0,
           adid: obj[1],
@@ -41,7 +140,8 @@ module.exports = function(passport) {
           comments : obj[2]
         }
       }else if(obj[0] == "High_Sad") {
-          var data = {
+        console.log("high_sad")
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -49,7 +149,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "High_Angry") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -57,7 +157,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "High_Afraid") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -65,7 +165,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "High_Ashamed") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -73,7 +173,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Medium_Happy") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -81,7 +181,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Medium_Sad") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -89,7 +189,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Medium_Angry") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -97,7 +197,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Medium_Afraid") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -105,7 +205,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Medium_Ashamed") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -113,7 +213,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Low_Happy") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -121,7 +221,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Low_Sad") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -129,7 +229,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Low_Angry") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -137,7 +237,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Low_Afraid") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -145,7 +245,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else if(obj[0] == "Low_Ashamed") {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -153,7 +253,7 @@ module.exports = function(passport) {
             comments : obj[2]
         }
       }else {
-          var data = {
+           data = {
             feedback : obj[0],
             date: date0,
             adid: obj[1],
@@ -161,24 +261,33 @@ module.exports = function(passport) {
             comments : obj[2]
           }
         }
-
-
-  console.log(data);
-
+  console.log( data);
    var db=new emoticons(data);
+  //  emoticons.find({date : data.date , adid : data.adid},function(err,res) {
+      //console.log("response",res[0].adid,res[0].date);
 
-         db.save().then((doc)=>{console.console.log("successfully inserted");
-          });
-          emoticons.find(function(data)
-          {
-            console.log(data);
-          });
-          // res.status(200);
+      //if(res.length > 0){
+        console.log("data rating, type",data.adid, typeof data.rating);
+          emoticons.update({ adid: data.adid, date: data.date },
+           {'$set': {feedback: data.feedback, rating: data.rating, comments: data.comments}},
+           { upsert: true },
+           function(err, res) {
+             console.log('err: ', err);
+             console.log('res: ', res);
+           }
+         )
+        // emoticons.update({ adid: "NA353557",date : "9-01-2018" },
+        //   {'$set':{feedback : "Low_A",date : data.date,adid: data.adid,rating : data.rating,comments : data.comments}},
+        //   { upsert: true })
+      //} else {
+       // db.save().then((doc)=>{console.console.log("successfully inserted");
+       //  });
+      //}
+    //})
+          res.status(200);
           res.send("hello")
 
   });
-
-
 
  //
  // router.get('/feedback',function(req,res,next){
