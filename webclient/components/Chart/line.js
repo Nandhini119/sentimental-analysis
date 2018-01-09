@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import {Line} from 'react-chartjs-2';
 
-
-
-
 const options = {
   responsive: true,
   title: {
@@ -21,7 +18,7 @@ const options = {
       {
         display: true,
         scaleLabel: {
-          show: true,
+          display: true,
           labelString: 'Month'
         },
         ticks : {
@@ -31,12 +28,13 @@ const options = {
         }
       }
     ],
+
     yAxes: [
       {
         display: true,
         scaleLabel: {
-          show: true,
-          labelString: 'Value'
+          display: true,
+          labelString: 'emotion rating'
         },
         ticks: {
           suggestedMin: 0,
@@ -81,7 +79,7 @@ class Trend extends Component {
       labels: dates,
       datasets: [
            {
-             //label: "Good",
+             label: "emotional change",
              type : "line",
              data: rating,
              fill: false,
