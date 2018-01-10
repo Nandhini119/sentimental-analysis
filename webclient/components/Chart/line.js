@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import {Line} from 'react-chartjs-2';
 
 const options = {
+  legend: {
+            display: false
+         },
   responsive: true,
   title: {
     display: false,
@@ -75,7 +78,7 @@ class Trend extends Component {
       labels: dates,
       datasets: [
            {
-             label: "emotional change",
+
              type : "line",
              data: rating,
              fill: false,

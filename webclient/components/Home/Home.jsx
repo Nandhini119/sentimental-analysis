@@ -6,7 +6,8 @@ import {
   Dropdown,
   Table
 } from 'semantic-ui-react';
-import { Sidebar, Segment, Button, Menu, Image, Icon, Header } from 'semantic-ui-react'
+import { Sidebar, Segment, Button, Menu, Image, Icon, Header, Modal } from 'semantic-ui-react';
+
 const {
   hashHistory
 } = require('react-router');
@@ -21,6 +22,7 @@ import moment from 'moment';
 import {
   Form,
 } from 'semantic-ui-react';
+import superagent from 'superagent';
 import TextField from 'material-ui/TextField';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
@@ -64,7 +66,7 @@ const styles = {
   },
   dropdown: {
     marginTop: "9px",
-    width: "70%",
+    width: "50%",
   },
   tablesize : {
     marginTop : "20px",
@@ -96,6 +98,7 @@ class Home extends React.Component {
         adid: "",
         adid_arr: [],
         table_arr: "",
+        logout : false,
         H_H: 0,
         M_H: 0,
         L_H: 0,
@@ -330,7 +333,26 @@ class Home extends React.Component {
       })
     }
     handleLogout() {
-      hashHistory.push('/');
+
+                        let self = this;
+                        superagent
+                            .get('/logout')
+                            .end(function(err, res) {
+
+                                if (res.body.status === 'error in logout') {
+                                    console.log("error in logout");
+                                } else if (res.body.status === 'success') {
+                                    self.setState({
+                                        logout: true
+                                    });
+                                    hashHistory.push('/');
+                                    localStorage.removeItem('username');
+                                } else {
+                                    console.log("error in logoutfunction");
+                                }
+
+                            });
+
     }
     handleActiveTab() {}
     handleFromDate(event, date) {
@@ -770,6 +792,7 @@ class Home extends React.Component {
               <Sidebar.Pushable as={Segment} style = {styles.sidebar}>
           <Sidebar as={Menu} animation='overlay' width='wide' visible={true} icon='labeled' vertical inverted>
           <div className = "formalign" >
+
           <Form onSubmit = {
            this.handleAnalysis} >
          <Row center = "xs" >
@@ -803,7 +826,7 @@ class Home extends React.Component {
          }
          textFieldStyle = {
            {
-             width: '100%'
+             width: '80%'
            }
          }
          onChange = {
@@ -821,7 +844,7 @@ class Home extends React.Component {
          }
          textFieldStyle = {
            {
-             width: '100%',
+             width: '80%',
              color : "white"
            }
          }
@@ -829,15 +852,30 @@ class Home extends React.Component {
            this.handleEndDate
          }
          /><
-         /Row> <
-         Row center = "xs" >
-         <
-         Button type = 'submit'
+         /Row>
+         <Row center = "xs" >
+         <Button type = 'submit'
          style = {
            styles.button
-         } > Get Analysis < /Button> <
-         /Row>  <
-         /Form> <
+         } > Get Analysis < /Button>
+
+         </Row>  <
+         /Form><Modal trigger={<Button basic color = "blue" style = {
+                  styles.button
+                } >click to create group</Button>} basic size='small'>
+    <Header icon='archive' content='Archive Old Messages' />
+    <Modal.Content>
+      <p>Your inbox is getting full, would you like us to enable automatic archiving of old messages?</p>
+    </Modal.Content>
+    <Modal.Actions>
+      <Button basic color='red' inverted>
+        <Icon name='remove' /> No
+      </Button>
+      <Button color='green' inverted>
+        <Icon name='checkmark' /> Yes
+      </Button>
+    </Modal.Actions>
+  </Modal> <
          /div>
           </Sidebar>
           <Sidebar.Pusher className = "background">
@@ -893,8 +931,7 @@ class Home extends React.Component {
                    /div>: " "}
           </Sidebar.Pusher>
         </Sidebar.Pushable>
-                <
-                        /div>)
+                </div>)
                     }
                 }
 
