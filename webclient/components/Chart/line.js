@@ -4,7 +4,7 @@ import {Line} from 'react-chartjs-2';
 const options = {
   responsive: true,
   title: {
-    display: true,
+    display: false,
     text: 'Trend Graph'
   },
   tooltips: {
@@ -22,10 +22,10 @@ const options = {
           labelString: 'Days'
         },
         ticks : {
-          callback : function(label) {
-            return label.slice(0, 10);
+          callback : function(labels) {
+            return labels.slice(0, 10);
           }
-        }
+       }
       }
     ],
 
@@ -62,14 +62,10 @@ class Trend extends Component {
     console.log("line_chart props",this.props.lineData);
     var dates = [];
     var rating = [];
-    // console.log('typeof lineData', typeof this.props.lineData);
-    // var data=this.props.lineData[0];
-    // console.log("data",data);
-    // console.log("data length",data.length);
     if(this.props.lineData.length > 0) {
       this.props.lineData[0].map((datas,index) =>{
-        //console.log("datas, index", datas,index);
-        dates.push(datas.date);
+        console.log("graph data",datas);
+        dates.push(datas.emotion);
         rating.push(datas.rating/datas.count)
 
       });

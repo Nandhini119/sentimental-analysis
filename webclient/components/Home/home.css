@@ -1,23 +1,32 @@
-/* .styles.background{
-  background: white !important;
-} */
-.chart {
-height : 275px;
-width : 97%;
-margin-top: 40px;
- }
+.background {
+
+    background-color: #8080801c
+}
+
 #end {
   color: white !important;
 
 }
-
+#undefined-Fromdate-undefined-38456 {
+  color : white !important;
+  background-color : red !important;
+}
+.content  {
+  margin-top : 30px;
+}
 .chartPie {
   margin-top: -21%;
 }
 #line_segment{
   height: 400px;
 }
+.formalign {
+margin-top : 70px;
+}
 .linechart {
-  width : 70%;
-  heigth : 30%;
+  width : 40%;
+  heigth : 40%;
+}
+.tablesize {
+  margin-top : 70px;
 }

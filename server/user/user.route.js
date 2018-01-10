@@ -23,23 +23,18 @@ module.exports = function(passport) {
   });
 
 router.get('/adid',function(req,res,next) {
-  console.log("get adid");
   let r = ["All"];
   emoticons.find({}, 'adid', function (err, docs) {
 if(err)
 console.log(err);
 else {
-  console.log("response data",docs)
   docs.map((data,index)=> {
     //console.log(data.adid);
     if( r.includes(data.adid)){
-      console.log("exists");
     } else {
-      console.log("new");
       r.push(data.adid);
     }
   })
-  console.log("r",r)
   var result = {
       adid : r
     }
@@ -50,13 +45,15 @@ else {
 })
 
 router.get('/table_analysis',function(req,res,next) {
-  console.log("In Table analysis",req.query.adid);
+  console.log("In Table analysis",req.query);
   if(req.query.adid == "All" || req.query.adid == 1) {
     emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}},function(err,data)
     { if(err)
+      {
       throw err;
+    }
     else {
-      console.log("equal dates data",data);
+      console.log("same dates data",data);
       let r = {};
       data.map(o => {
         if(o.feedback in r) {
@@ -119,14 +116,16 @@ router.get('/table_analysis',function(req,res,next) {
 })
 
 router.get('/group_analysis',function(req,res,next) {
-  console.log("in grup analysis", req.query.adid);
+  console.log("in grup analysis", req.query.adid,req.query.fromDate, req.query.endDate);
   if(req.query.adid == "All" || req.query.adid == 1) {
     console.log("if")
     emoticons.find({date: {"$gte": req.query.fromDate, "$lte": req.query.endDate}},function(err,data)
-    { if(err)
-      throw err;
+    { if(err) {
+      console.log("error in mongoss",err);
+        throw err;
+    }
     else {
-      console.log(data);
+      console.log("group-analysis",data);
       let r = {};
       data.map(o => {
         if(o.date in r) {
@@ -148,7 +147,7 @@ router.get('/group_analysis',function(req,res,next) {
        var result = {
          line_chart:r_arr
        }
-       //console.log(result);
+       console.log(result);
        res.send(result);
     }
     });
@@ -175,7 +174,7 @@ router.get('/group_analysis',function(req,res,next) {
       });
       console.log('r: ', r);
       let r_arr = [];
-      for(key in r) { r_arr.push({ rating: r[key].rating,count : r[key].count, date: key}); }
+      for(key in r) { r_arr.push({ rating: r[key].rating,count : r[key].count, emotion: key}); }
       console.log('r_arr: ', r_arr);
        var result = {
          line_chart:r_arr
